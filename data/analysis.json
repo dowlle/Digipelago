@@ -1,0 +1,601 @@
+{
+  "totals": {
+    "raw_entries": 1488,
+    "fetch_errors": 0,
+    "usable": 1488,
+    "candidate_pool": 991,
+    "variants_excluded": {
+      "parenthetical": 182,
+      "x-antibody": 171
+    },
+    "excluded_missing_level": 141,
+    "excluded_missing_attr": 192,
+    "multi_level_count": 173,
+    "multi_attribute_count": 286
+  },
+  "distribution_by_jp_level": {
+    "Ultimate": 406,
+    "Adult": 389,
+    "Perfect": 352,
+    "Child": 214,
+    "Armor": 77,
+    "Baby II": 62,
+    "Baby I": 48,
+    "Hybrid": 32,
+    "Unknown": 6
+  },
+  "distribution_by_en_tier": {
+    "Mega": 406,
+    "Champion": 346,
+    "Ultimate": 308,
+    "Rookie": 183,
+    "null": 141,
+    "In-Training": 57,
+    "Fresh": 46,
+    "Armor": 1
+  },
+  "distribution_by_attribute": {
+    "Virus": 428,
+    "Data": 369,
+    "Vaccine": 336,
+    "null": 192,
+    "Free": 94,
+    "Unknown": 41,
+    "Variable": 27,
+    "No Data": 1
+  },
+  "cell_counts_level_x_attribute": {
+    "Mega | Virus": 108,
+    "Champion | Data": 100,
+    "Champion | Virus": 83,
+    "Ultimate | Virus": 83,
+    "Mega | Vaccine": 72,
+    "Champion | Vaccine": 71,
+    "Mega | Data": 71,
+    "Ultimate | Data": 69,
+    "Ultimate | Vaccine": 62,
+    "Rookie | Data": 43,
+    "Rookie | Virus": 39,
+    "Rookie | Vaccine": 39,
+    "Fresh | Free": 30,
+    "In-Training | Free": 27,
+    "Mega | Unknown": 14,
+    "Ultimate | Variable": 10,
+    "Champion | Free": 9,
+    "Champion | Variable": 9,
+    "In-Training | Data": 8,
+    "Mega | Free": 6,
+    "Champion | Unknown": 6,
+    "Ultimate | Free": 6,
+    "Rookie | Unknown": 6,
+    "Mega | Variable": 6,
+    "Rookie | Free": 5,
+    "Ultimate | Unknown": 3,
+    "Fresh | Data": 2,
+    "Rookie | Variable": 2,
+    "In-Training | Virus": 1,
+    "Fresh | Unknown": 1
+  },
+  "graph": {
+    "pool_roots": 109,
+    "forced_roots_champion_plus": 43,
+    "forced_roots_sample": [
+      [
+        284,
+        "Chaos Lord",
+        "Mega"
+      ],
+      [
+        283,
+        "Chaos Greymon",
+        "Mega"
+      ],
+      [
+        286,
+        "Chaos Seadramon",
+        "Mega"
+      ],
+      [
+        459,
+        "Parallelmon",
+        "Mega"
+      ],
+      [
+        579,
+        "Trailmon Angler",
+        "Champion"
+      ],
+      [
+        582,
+        "Trailmon Franken",
+        "Champion"
+      ],
+      [
+        581,
+        "Trailmon Buffalo",
+        "Champion"
+      ],
+      [
+        583,
+        "Trailmon Kettle",
+        "Champion"
+      ],
+      [
+        584,
+        "Trailmon Mole",
+        "Champion"
+      ],
+      [
+        587,
+        "Trailmon of Darkness",
+        "Champion"
+      ],
+      [
+        586,
+        "Trailmon Worm",
+        "Champion"
+      ],
+      [
+        805,
+        "Battle Armament Trailmon",
+        "Champion"
+      ],
+      [
+        836,
+        "Trailmon C-89",
+        "Champion"
+      ],
+      [
+        839,
+        "Yo!Yo!mon",
+        "Ultimate"
+      ],
+      [
+        938,
+        "Deadly Axemon",
+        "Champion"
+      ],
+      [
+        940,
+        "Deckerdramon",
+        "Champion"
+      ],
+      [
+        958,
+        "Monitamon",
+        "Champion"
+      ],
+      [
+        971,
+        "Tactimon",
+        "Mega"
+      ],
+      [
+        974,
+        "Weddinmon",
+        "Ultimate"
+      ],
+      [
+        982,
+        "Shortmon",
+        "Champion"
+      ],
+      [
+        1015,
+        "King Whamon",
+        "Mega"
+      ],
+      [
+        1046,
+        "Footmon",
+        "Ultimate"
+      ],
+      [
+        1048,
+        "Ganemon",
+        "Champion"
+      ],
+      [
+        1096,
+        "Shademon",
+        "Champion"
+      ],
+      [
+        1113,
+        "Ginkakumon",
+        "Champion"
+      ]
+    ],
+    "cross_attribute_edges": 6568,
+    "attribute_orphans": 123,
+    "attribute_orphans_sample": [
+      [
+        4,
+        "Betamon",
+        "Virus"
+      ],
+      [
+        24,
+        "Tunomon",
+        "Data"
+      ],
+      [
+        71,
+        "Mochimon",
+        "Data"
+      ],
+      [
+        79,
+        "Otamamon",
+        "Virus"
+      ],
+      [
+        80,
+        "Pagumon",
+        "Virus"
+      ],
+      [
+        86,
+        "Tokomon",
+        "Data"
+      ],
+      [
+        101,
+        "Piyomon",
+        "Vaccine"
+      ],
+      [
+        85,
+        "Tentomon",
+        "Vaccine"
+      ],
+      [
+        103,
+        "Pukamon",
+        "Data"
+      ],
+      [
+        117,
+        "Gomamon",
+        "Vaccine"
+      ],
+      [
+        126,
+        "Kunemon",
+        "Virus"
+      ],
+      [
+        132,
+        "Apocalymon",
+        "Unknown"
+      ],
+      [
+        136,
+        "Bakumon",
+        "Vaccine"
+      ],
+      [
+        148,
+        "Clear Agumon",
+        "Vaccine"
+      ],
+      [
+        158,
+        "Dokunemon",
+        "Virus"
+      ],
+      [
+        178,
+        "Mushmon",
+        "Virus"
+      ],
+      [
+        190,
+        "Snow Goburimon",
+        "Virus"
+      ],
+      [
+        196,
+        "Toy Agumon",
+        "Vaccine"
+      ],
+      [
+        214,
+        "Penmon",
+        "Vaccine"
+      ],
+      [
+        225,
+        "Pyocomon",
+        "Data"
+      ],
+      [
+        231,
+        "Shamamon",
+        "Virus"
+      ],
+      [
+        247,
+        "Honeybeemon",
+        "Data"
+      ],
+      [
+        261,
+        "Kodokugumon Baby",
+        "Virus"
+      ],
+      [
+        262,
+        "Kokuwamon",
+        "Data"
+      ],
+      [
+        270,
+        "Arkadimon Baby",
+        "Free"
+      ]
+    ]
+  },
+  "refined_climb_from_rookie": {
+    "_note": "Rookie-and-below are roots; only Champion+ must climb. Attribute consistency checked on full attribute sets.",
+    "champion_plus_in_pool": 788,
+    "forced_roots_no_prior": 43,
+    "forced_roots_sample": [
+      [
+        284,
+        "Chaos Lord",
+        "Mega"
+      ],
+      [
+        283,
+        "Chaos Greymon",
+        "Mega"
+      ],
+      [
+        286,
+        "Chaos Seadramon",
+        "Mega"
+      ],
+      [
+        459,
+        "Parallelmon",
+        "Mega"
+      ],
+      [
+        579,
+        "Trailmon Angler",
+        "Champion"
+      ],
+      [
+        582,
+        "Trailmon Franken",
+        "Champion"
+      ],
+      [
+        581,
+        "Trailmon Buffalo",
+        "Champion"
+      ],
+      [
+        583,
+        "Trailmon Kettle",
+        "Champion"
+      ],
+      [
+        584,
+        "Trailmon Mole",
+        "Champion"
+      ],
+      [
+        587,
+        "Trailmon of Darkness",
+        "Champion"
+      ],
+      [
+        586,
+        "Trailmon Worm",
+        "Champion"
+      ],
+      [
+        805,
+        "Battle Armament Trailmon",
+        "Champion"
+      ],
+      [
+        836,
+        "Trailmon C-89",
+        "Champion"
+      ],
+      [
+        839,
+        "Yo!Yo!mon",
+        "Ultimate"
+      ],
+      [
+        938,
+        "Deadly Axemon",
+        "Champion"
+      ],
+      [
+        940,
+        "Deckerdramon",
+        "Champion"
+      ],
+      [
+        958,
+        "Monitamon",
+        "Champion"
+      ],
+      [
+        971,
+        "Tactimon",
+        "Mega"
+      ],
+      [
+        974,
+        "Weddinmon",
+        "Ultimate"
+      ],
+      [
+        982,
+        "Shortmon",
+        "Champion"
+      ],
+      [
+        1015,
+        "King Whamon",
+        "Mega"
+      ],
+      [
+        1046,
+        "Footmon",
+        "Ultimate"
+      ],
+      [
+        1048,
+        "Ganemon",
+        "Champion"
+      ],
+      [
+        1096,
+        "Shademon",
+        "Champion"
+      ],
+      [
+        1113,
+        "Ginkakumon",
+        "Champion"
+      ]
+    ],
+    "cross_attribute_edges": 4484,
+    "total_climb_edges": 10021,
+    "attribute_orphans_unfixable": 32,
+    "attribute_orphans_sample": [
+      [
+        319,
+        "Master V-dramon",
+        "Vaccine"
+      ],
+      [
+        513,
+        "Black Seraphimon",
+        "Virus"
+      ],
+      [
+        783,
+        "Ultimate Chaosmon",
+        "Unknown"
+      ],
+      [
+        808,
+        "Bio Lotusmon",
+        "Data"
+      ],
+      [
+        809,
+        "Bio Spinomon",
+        "Virus"
+      ],
+      [
+        846,
+        "Queen Chessmon",
+        "Virus"
+      ],
+      [
+        907,
+        "Surfimon",
+        "Vaccine"
+      ],
+      [
+        943,
+        "Dorulumon",
+        "Virus"
+      ],
+      [
+        951,
+        "Mail Birdramon",
+        "Data"
+      ],
+      [
+        972,
+        "Troopmon",
+        "Data"
+      ],
+      [
+        1028,
+        "Captain Hookmon",
+        "Vaccine"
+      ],
+      [
+        1062,
+        "Olegmon",
+        "Vaccine"
+      ],
+      [
+        1070,
+        "Targetmon",
+        "Virus"
+      ],
+      [
+        1074,
+        "Vulcanusmon",
+        "Data"
+      ],
+      [
+        1129,
+        "Kinkakumon",
+        "Virus"
+      ],
+      [
+        1136,
+        "Luminamon",
+        "Vaccine"
+      ],
+      [
+        1161,
+        "Aegiomon",
+        "Vaccine"
+      ],
+      [
+        1163,
+        "Bacchusmon",
+        "Virus"
+      ],
+      [
+        1188,
+        "Junomon",
+        "Virus"
+      ],
+      [
+        1208,
+        "Meicrackmon",
+        "Vaccine"
+      ],
+      [
+        1245,
+        "Ragna Lordmon",
+        "Virus"
+      ],
+      [
+        1308,
+        "Baluchimon",
+        "Data"
+      ],
+      [
+        1312,
+        "Dark Maildramon",
+        "Virus"
+      ],
+      [
+        1319,
+        "Exermon",
+        "Data"
+      ],
+      [
+        1329,
+        "Mimicmon",
+        "Virus"
+      ]
+    ]
+  }
+}
