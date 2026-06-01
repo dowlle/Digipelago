@@ -12,10 +12,12 @@ _PATH = Path(__file__).parent / "data" / "digimon_mvp.json"
 _RAW_BYTES = _PATH.read_bytes()
 _DATA = json.loads(_RAW_BYTES.decode("utf-8"))
 
-# Content hash of the pinned dataset. Sent in slot_data so the client can verify
-# its bundled copy matches the seed's — guards the static reference data (names,
-# sprites, lines, roots) against drift without shipping it in slot_data.
-DATASET_VERSION: str = hashlib.sha256(_RAW_BYTES).hexdigest()[:12]
+# Content version of the pinned dataset. Embedded by tools/build_digimon_data.py
+# (hash of the version-less payload) and READ here — never recomputed — so the
+# apworld and client share one token and can't drift. Sent in slot_data so the
+# client can verify its bundled copy matches the seed's. Falls back to a byte
+# hash for any pre-embed dataset.
+DATASET_VERSION: str = _DATA.get("version") or hashlib.sha256(_RAW_BYTES).hexdigest()[:12]
 
 LEVEL_TIER: dict[str, int] = _DATA["level_tier"]      # {"Rookie": 2, ... "Mega": 5}
 ATTRIBUTES: list[str] = _DATA["attributes"]           # ["Data","Free","Unknown","Vaccine","Variable","Virus"]

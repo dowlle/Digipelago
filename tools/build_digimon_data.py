@@ -15,6 +15,7 @@ Usage:
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import sys
 import time
@@ -368,6 +369,11 @@ def build_curated(raw):
             for i, x in sorted(pool.items())
         },
     }
+    # Content version: hash of the dataset payload WITHOUT the version field, so
+    # the apworld (data.py) and client (dataset.ts) both read the same embedded
+    # token and can't drift. Readers read `version`; they never recompute.
+    _payload = json.dumps(dataset, ensure_ascii=False, indent=2)
+    dataset["version"] = hashlib.sha256(_payload.encode("utf-8")).hexdigest()[:12]
     MVP.write_text(json.dumps(dataset, ensure_ascii=False, indent=2), encoding="utf-8")
 
     report = {
