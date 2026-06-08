@@ -70,6 +70,16 @@ class TestBigUpgrades(_DigiBase):
     options = {"starting_capacity": 10, "capacity_per_upgrade": 100}
 
 
+class TestMixedMode(_DigiBase):
+    """Mixed (random per-creature) input mode is client-side only; must not change logic."""
+    options = {"starting_mode": 3, "allow_mode_switch": False}
+
+
+class TestHardSilhouette(_DigiBase):
+    """Hard silhouette difficulty is client-side only; it must not change logic."""
+    options = {"starting_mode": 2, "mc_difficulty": 2}
+
+
 # ── invariant tests ──────────────────────────────────────────────────────────
 
 class TestInvariants(_DigiBase):
@@ -133,12 +143,13 @@ class TestInvariants(_DigiBase):
         sd = self.world.fill_slot_data()
         for key in ("dataset_version", "starting_capacity", "capacity_per_upgrade",
                     "goal", "goal_level", "goal_count", "starting_attribute",
-                    "starting_mode", "allow_mode_switch", "starting_stamina",
-                    "stamina_regen_seconds",
+                    "starting_mode", "allow_mode_switch", "mc_difficulty",
+                    "starting_stamina", "stamina_regen_seconds",
                     "level_tier", "attributes", "cell_counts", "pool_size"):
             self.assertIn(key, sd, f"slot_data missing '{key}'")
         self.assertTrue(sd["dataset_version"], "dataset_version must be a non-empty hash")
-        self.assertIn(sd["starting_mode"], ("free_text", "free_text_hard", "silhouette"))
+        self.assertIn(sd["starting_mode"], ("free_text", "free_text_hard", "silhouette", "mixed"))
+        self.assertIn(sd["mc_difficulty"], ("easy", "normal", "hard"))
         self.assertIsInstance(sd["allow_mode_switch"], bool)
         self.assertEqual(sd["pool_size"], D.POOL_SIZE)
         self.assertEqual(sum(sd["cell_counts"].values()), D.POOL_SIZE)

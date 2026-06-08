@@ -65,19 +65,40 @@ class StartingMode(Choice):
     never affects what is beatable (mixed-mode multiworlds are fine).
     - free_text: type the Digimon's name (catch-anything).
     - free_text_hard: free-text with Wordle-style per-guess clues toward a hidden target.
-    - silhouette: multiple-choice, name the silhouette."""
+    - silhouette: multiple-choice, name the silhouette.
+    - mixed: each round randomly rolls type-the-silhouette OR multiple-choice
+      (rolled per Digimon). Like silhouette mode, it needs the on-device image fetch.
+      (`random` is a reserved Archipelago option name, hence `mixed`.)"""
     display_name = "Starting Mode"
     option_free_text = 0
     option_free_text_hard = 1
     option_silhouette = 2
+    option_mixed = 3
     default = 0
 
 
 class AllowModeSwitch(DefaultOnToggle):
     """Whether the player may change input mode in the client. On (default): the
     client opens in Starting Mode but the player can switch freely. Off: the client
-    is locked to Starting Mode (the mode and the hard-mode toggle are both fixed)."""
+    is locked to Starting Mode (the mode, the hard-mode toggle, and the silhouette
+    difficulty are all fixed)."""
     display_name = "Allow Mode Switch"
+
+
+class McDifficulty(Choice):
+    """Silhouette mode only: how the wrong multiple-choice options (distractors) are
+    chosen, which sets how hard the silhouette is to tell apart. Client-side only,
+    never affects what is beatable.
+    - easy: distractors drawn from anywhere in the pool (often a different level, so
+      they are easy to rule out).
+    - normal: distractors share the target's level (the previous default).
+    - hard: distractors prefer same-base variants of the target (e.g. target Agumon ->
+      Toy Agumon / Yuki Agumon / ...), the most confusable options the data allows."""
+    display_name = "Silhouette Difficulty"
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    default = 1
 
 
 class StartingStamina(Range):
@@ -144,7 +165,10 @@ class DigiProteinCount(Range):
 STARTING_ATTRIBUTE_NAMES = {0: "Vaccine", 1: "Virus", 2: "Data", 3: "Free"}
 
 # Choice index -> client input-mode string (must match the client's SlotData type).
-STARTING_MODE_NAMES = {0: "free_text", 1: "free_text_hard", 2: "silhouette"}
+STARTING_MODE_NAMES = {0: "free_text", 1: "free_text_hard", 2: "silhouette", 3: "mixed"}
+
+# Choice index -> client silhouette-difficulty string (must match the client's SlotData type).
+MC_DIFFICULTY_NAMES = {0: "easy", 1: "normal", 2: "hard"}
 
 # Choice index -> dataset level string (must match data.LEVEL_TIER keys exactly).
 GOAL_LEVEL_NAMES = {0: "Rookie", 1: "Champion", 2: "Ultimate", 3: "Mega"}
@@ -160,6 +184,7 @@ class DigipelagoOptions(PerGameCommonOptions):
     starting_attribute: StartingAttribute
     starting_mode: StartingMode
     allow_mode_switch: AllowModeSwitch
+    mc_difficulty: McDifficulty
     starting_stamina: StartingStamina
     stamina_ups: StaminaUps
     stamina_regen_seconds: StaminaRegenSeconds

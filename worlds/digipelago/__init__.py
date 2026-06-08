@@ -20,6 +20,7 @@ from .Items import DigipelagoItem, item_data_table, item_table
 from .Locations import CATCH_SLOT_PREFIX, MAX_SLOTS, DigipelagoLocation, location_table
 from .Options import (
     GOAL_LEVEL_NAMES,
+    MC_DIFFICULTY_NAMES,
     STARTING_ATTRIBUTE_NAMES,
     STARTING_MODE_NAMES,
     DigipelagoOptions,
@@ -179,6 +180,8 @@ class DigipelagoWorld(World):
             # Client input-mode lock (client-side only, never gates AP).
             "starting_mode": STARTING_MODE_NAMES[o.starting_mode.value],
             "allow_mode_switch": bool(o.allow_mode_switch.value),
+            # Silhouette distractor difficulty (client-side only, never gates AP).
+            "mc_difficulty": MC_DIFFICULTY_NAMES[o.mc_difficulty.value],
             "starting_stamina": o.starting_stamina.value,
             "stamina_regen_seconds": o.stamina_regen_seconds.value,
             "level_tier": D.LEVEL_TIER,
