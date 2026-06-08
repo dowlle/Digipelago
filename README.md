@@ -1,10 +1,8 @@
-# Digipelago — code
+# Digipelago — APWorld
 
-Spike + future code home for **Digipelago**, a Digimon guessing-game randomizer for
-Archipelago (the Digimon counterpart to Pokepelago). Non-commercial fan project.
-
-**Design & decisions live in the vault:** `F:\Vaults\stefappelhof\11-Dev\Digipelago\`
-(start at `Digipelago.md` / `Digipelago Agent Briefing.md`).
+The Archipelago world for **Digipelago**, a Digimon guessing-game randomizer for
+Archipelago (the Digimon counterpart to Pokepelago). Unofficial, non-commercial fan
+project. The game client lives in a separate repository.
 
 ## Current contents (Phase 0)
 
@@ -37,5 +35,16 @@ cp -r worlds/digipelago <AP_INSTALL>/worlds/digipelago
 Validated 2026-05-30: beatable 922-location seed, 0.12s. See the vault note
 `Development/2026-05-30 — Phase 1 — APWorld Vertical Slice`.
 
-Phase 1 continues with goal variety, full slot_data, apworld tests, then the client fork
-of `D:\pythonProjects\PokepelagoClient\`.
+## License
+
+This project's own source code is licensed under the **MIT License** (see `LICENSE`).
+
+## Fan project disclaimer
+
+Digipelago is an unofficial, non-commercial fan project. Digimon and all related names,
+characters, and media are trademarks and copyright of Bandai, Toei Animation, and their
+respective owners. This project is not affiliated with, endorsed by, or sponsored by any
+of them. Digimon data is sourced from [Digi-API](https://digi-api.com/) (which draws on
+Wikimon); no copyrighted Digimon artwork is hosted or distributed by this project. The
+MIT license covers this repository's own code only, not any Digimon names, data, or media,
+which remain the property of their respective owners.
