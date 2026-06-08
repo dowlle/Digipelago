@@ -18,7 +18,12 @@ from worlds.generic.Rules import set_rule
 from . import data as D
 from .Items import DigipelagoItem, item_data_table, item_table
 from .Locations import CATCH_SLOT_PREFIX, MAX_SLOTS, DigipelagoLocation, location_table
-from .Options import GOAL_LEVEL_NAMES, STARTING_ATTRIBUTE_NAMES, DigipelagoOptions
+from .Options import (
+    GOAL_LEVEL_NAMES,
+    STARTING_ATTRIBUTE_NAMES,
+    STARTING_MODE_NAMES,
+    DigipelagoOptions,
+)
 
 
 class DigipelagoWeb(WebWorld):
@@ -119,6 +124,12 @@ class DigipelagoWorld(World):
         self.multiworld.push_precollected(self.create_item(f"{self.starter_attr} Key"))
         pool += [self.create_item(f"{a} Key") for a in D.ATTRIBUTES if a != self.starter_attr]
 
+        # Stamina Ups + food: useful (never progression), client-side meter boosts.
+        pool += [self.create_item("Stamina Up") for _ in range(o.stamina_ups.value)]
+        pool += [self.create_item("Processed Meat") for _ in range(o.processed_meat.value)]
+        pool += [self.create_item("Digimeat") for _ in range(o.digimeat.value)]
+        pool += [self.create_item("DigiProtein") for _ in range(o.digiprotein.value)]
+
         # Fill remaining locations with filler.
         total_locations = sum(1 for loc in self.multiworld.get_locations(self.player)
                               if loc.address is not None)
@@ -165,6 +176,11 @@ class DigipelagoWorld(World):
             "goal_level": self.goal_level,
             "goal_count": self.goal_count,
             "starting_attribute": self.starter_attr,
+            # Client input-mode lock (client-side only, never gates AP).
+            "starting_mode": STARTING_MODE_NAMES[o.starting_mode.value],
+            "allow_mode_switch": bool(o.allow_mode_switch.value),
+            "starting_stamina": o.starting_stamina.value,
+            "stamina_regen_seconds": o.stamina_regen_seconds.value,
             "level_tier": D.LEVEL_TIER,
             "attributes": D.ATTRIBUTES,
             "cell_counts": {f"{lv}|{at}": n for (lv, at), n in D.CELL_COUNTS.items()},

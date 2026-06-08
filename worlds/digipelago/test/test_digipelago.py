@@ -133,9 +133,13 @@ class TestInvariants(_DigiBase):
         sd = self.world.fill_slot_data()
         for key in ("dataset_version", "starting_capacity", "capacity_per_upgrade",
                     "goal", "goal_level", "goal_count", "starting_attribute",
+                    "starting_mode", "allow_mode_switch", "starting_stamina",
+                    "stamina_regen_seconds",
                     "level_tier", "attributes", "cell_counts", "pool_size"):
             self.assertIn(key, sd, f"slot_data missing '{key}'")
         self.assertTrue(sd["dataset_version"], "dataset_version must be a non-empty hash")
+        self.assertIn(sd["starting_mode"], ("free_text", "free_text_hard", "silhouette"))
+        self.assertIsInstance(sd["allow_mode_switch"], bool)
         self.assertEqual(sd["pool_size"], D.POOL_SIZE)
         self.assertEqual(sum(sd["cell_counts"].values()), D.POOL_SIZE)
         # Lean: no heavy per-Digimon reference data dumped into slot_data.
