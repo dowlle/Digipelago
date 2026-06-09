@@ -51,13 +51,16 @@ class GoalCount(Range):
 
 class StartingAttribute(Choice):
     """Which attribute you start with unlocked (its key is precollected). Determines
-    your sphere-0 guessable pool together with the precollected Rookie level."""
+    your sphere-0 guessable pool together with the precollected Rookie level. Only the
+    four primary attributes can be a starter (Variable/Unknown are always unlocked
+    mid-run via their Key). Defaults to random, so default-settings seeds vary instead
+    of always opening on Vaccine; set vaccine/virus/data/free to pin it."""
     display_name = "Starting Attribute"
     option_vaccine = 0
     option_virus = 1
     option_data = 2
     option_free = 3
-    default = 0
+    default = "random"
 
 
 class StartingMode(Choice):

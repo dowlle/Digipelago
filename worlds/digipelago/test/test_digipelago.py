@@ -136,6 +136,11 @@ class TestFoodBaselineOnSwitchOnFreeText(TestFoodBaselineCounts):
 
 
 class TestInvariants(_DigiBase):
+    # Pin the starter to Vaccine: StartingAttribute now defaults to random, but the
+    # sphere-0 assertion below is written against the Rookie|Vaccine cell, so it must
+    # be deterministic. (TestDefault still exercises the random default.)
+    options = {"starting_attribute": 0}
+
     def test_cell_counts_sum_equals_pool(self):
         self.assertEqual(sum(D.CELL_COUNTS.values()), D.POOL_SIZE,
                          "every pooled Digimon must sit in exactly one (level, attribute) cell")
