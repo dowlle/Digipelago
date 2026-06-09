@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range
+from Options import Choice, PerGameCommonOptions, Range, Toggle
 
 
 class StartingCapacity(Range):
@@ -62,10 +62,13 @@ class StartingAttribute(Choice):
 
 class StartingMode(Choice):
     """Which input mode the client opens in. Input mode is client-side only and
-    never affects what is beatable (mixed-mode multiworlds are fine).
+    never affects what is beatable (mixed-mode multiworlds are fine). Defaults to
+    silhouette: paired with the locked default (Allow Mode Switch off), this closes
+    the see-silhouette-then-type exploit where a player could read the silhouette in
+    one mode and type the answer in another.
     - free_text: type the Digimon's name (catch-anything).
     - free_text_hard: free-text with Wordle-style per-guess clues toward a hidden target.
-    - silhouette: multiple-choice, name the silhouette.
+    - silhouette: multiple-choice, name the silhouette (default).
     - mixed: each round randomly rolls type-the-silhouette OR multiple-choice
       (rolled per Digimon). Like silhouette mode, it needs the on-device image fetch.
       (`random` is a reserved Archipelago option name, hence `mixed`.)"""
@@ -74,14 +77,14 @@ class StartingMode(Choice):
     option_free_text_hard = 1
     option_silhouette = 2
     option_mixed = 3
-    default = 0
+    default = 2
 
 
-class AllowModeSwitch(DefaultOnToggle):
-    """Whether the player may change input mode in the client. On (default): the
-    client opens in Starting Mode but the player can switch freely. Off: the client
-    is locked to Starting Mode (the mode, the hard-mode toggle, and the silhouette
-    difficulty are all fixed)."""
+class AllowModeSwitch(Toggle):
+    """Whether the player may change input mode in the client. Off (default): the
+    client is locked to Starting Mode (the mode, the hard-mode toggle, and the
+    silhouette difficulty are all fixed); the player must opt in to switching. On:
+    the client opens in Starting Mode but the player can switch freely."""
     display_name = "Allow Mode Switch"
 
 

@@ -80,7 +80,60 @@ class TestHardSilhouette(_DigiBase):
     options = {"starting_mode": 2, "mc_difficulty": 2}
 
 
+class TestFoodOverride(_DigiBase):
+    """Explicit food count above the baseline floor must win on a silhouette seed."""
+    options = {"starting_mode": 2, "processed_meat": 50}
+
+
+class TestFreeTextNoSwitch(_DigiBase):
+    """Free-text, switch off, all food 0: silhouette unreachable => no baseline food."""
+    options = {"starting_mode": 0, "allow_mode_switch": False,
+               "processed_meat": 0, "digimeat": 0, "digiprotein": 0}
+
+
+class TestFreeTextSwitchOn(_DigiBase):
+    """Free-text but switch ON => silhouette reachable => baseline food injected."""
+    options = {"starting_mode": 0, "allow_mode_switch": True,
+               "processed_meat": 0, "digimeat": 0, "digiprotein": 0}
+
+
 # ── invariant tests ──────────────────────────────────────────────────────────
+
+class TestFoodBaselineCounts(_DigiBase):
+    """Explicit food-count assertions across the silhouette-reachability matrix."""
+
+    def _count(self, name):
+        return sum(1 for i in self.multiworld.itempool
+                   if i.player == self.player and i.name == name)
+
+
+class TestFoodBaselineRespectsOverride(TestFoodBaselineCounts):
+    options = {"starting_mode": 2, "processed_meat": 50}
+
+    def test_explicit_higher_count_wins(self):
+        self.assertEqual(self._count("Processed Meat"), 50,
+                         "explicit count above the floor must win over the baseline")
+
+
+class TestNoFoodWhenSilhouetteUnreachable(TestFoodBaselineCounts):
+    options = {"starting_mode": 0, "allow_mode_switch": False,
+               "processed_meat": 0, "digimeat": 0, "digiprotein": 0}
+
+    def test_no_baseline_food(self):
+        self.assertEqual(self._count("Processed Meat"), 0)
+        self.assertEqual(self._count("Digimeat"), 0)
+        self.assertEqual(self._count("DigiProtein"), 0)
+
+
+class TestFoodBaselineOnSwitchOnFreeText(TestFoodBaselineCounts):
+    options = {"starting_mode": 0, "allow_mode_switch": True,
+               "processed_meat": 0, "digimeat": 0, "digiprotein": 0}
+
+    def test_baseline_injected_because_switch_enables_silhouette(self):
+        self.assertGreater(self._count("Processed Meat"), 0)
+        self.assertGreater(self._count("Digimeat"), 0)
+        self.assertGreater(self._count("DigiProtein"), 0)
+
 
 class TestInvariants(_DigiBase):
     def test_cell_counts_sum_equals_pool(self):
@@ -162,3 +215,32 @@ class TestInvariants(_DigiBase):
                     if loc.address is not None)
         n_items = len([i for i in self.multiworld.itempool if i.player == self.player])
         self.assertEqual(n_items, n_loc, "itempool must exactly fill addressable locations")
+
+    # ── flipped defaults: locked silhouette ──────────────────────────────────
+
+    def test_default_mode_is_locked_silhouette(self):
+        """Default seed must open in silhouette with switching locked off."""
+        o = self.world.options
+        self.assertEqual(o.starting_mode.value, o.starting_mode.option_silhouette,
+                         "default Starting Mode must be silhouette")
+        self.assertFalse(o.allow_mode_switch.value,
+                         "default Allow Mode Switch must be off (locked)")
+
+    def test_default_slot_data_locks_mode(self):
+        """Regression guard: default slot_data reflects locked silhouette."""
+        sd = self.world.fill_slot_data()
+        self.assertEqual(sd["starting_mode"], "silhouette")
+        self.assertIs(sd["allow_mode_switch"], False)
+
+    # ── food baseline ─────────────────────────────────────────────────────────
+
+    def _count_in_pool(self, name):
+        return sum(1 for i in self.multiworld.itempool
+                   if i.player == self.player and i.name == name)
+
+    def test_food_baseline_present_on_silhouette_seed(self):
+        """Default (now silhouette) seed must carry baseline food so a silhouette
+        player is never food-starved."""
+        self.assertGreater(self._count_in_pool("Processed Meat"), 0)
+        self.assertGreater(self._count_in_pool("Digimeat"), 0)
+        self.assertGreater(self._count_in_pool("DigiProtein"), 0)

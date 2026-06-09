@@ -27,6 +27,17 @@ from .Options import (
 )
 
 
+# Baseline food floors for silhouette-reachable seeds, so a silhouette player is
+# never food-starved (Stamina refills). Client-side only, never gates AP. Each is
+# capped against goal_count so short seeds carry less food than long ones; the
+# absolute MIN keeps even tiny-goal seeds supplied. Explicit option counts that are
+# higher than the floor still win (max(option, floor)).
+FOOD_BASELINE_MIN = 3            # absolute minimum even on the smallest goal_count
+PROCESSED_MEAT_BASELINE_CAP = 8  # +1 stamina each
+DIGIMEAT_BASELINE_CAP = 4        # +3 stamina each
+DIGIPROTEIN_BASELINE_CAP = 1     # refill to full
+
+
 class DigipelagoWeb(WebWorld):
     tutorials = []
 
@@ -126,10 +137,29 @@ class DigipelagoWorld(World):
         pool += [self.create_item(f"{a} Key") for a in D.ATTRIBUTES if a != self.starter_attr]
 
         # Stamina Ups + food: useful (never progression), client-side meter boosts.
+        # Silhouette play (where Stamina/food matter) is reachable when the seed
+        # starts in silhouette/mixed OR the player may switch modes. When reachable,
+        # floor each food count to a small baseline (scaled to goal_count, capped) so
+        # a silhouette player is never food-starved. Explicit higher counts still win
+        # via max(). Food is filler-displacing only, so this never changes AP logic.
+        silhouette_reachable = (
+            o.starting_mode.value in (o.starting_mode.option_silhouette,
+                                      o.starting_mode.option_mixed)
+            or bool(o.allow_mode_switch.value))
+        if silhouette_reachable:
+            floor = max(FOOD_BASELINE_MIN, min(self.goal_count, PROCESSED_MEAT_BASELINE_CAP))
+            meat_count = max(o.processed_meat.value, floor)
+            digimeat_count = max(o.digimeat.value,
+                                 max(FOOD_BASELINE_MIN, min(self.goal_count, DIGIMEAT_BASELINE_CAP)))
+            digiprotein_count = max(o.digiprotein.value, DIGIPROTEIN_BASELINE_CAP)
+        else:
+            meat_count = o.processed_meat.value
+            digimeat_count = o.digimeat.value
+            digiprotein_count = o.digiprotein.value
         pool += [self.create_item("Stamina Up") for _ in range(o.stamina_ups.value)]
-        pool += [self.create_item("Processed Meat") for _ in range(o.processed_meat.value)]
-        pool += [self.create_item("Digimeat") for _ in range(o.digimeat.value)]
-        pool += [self.create_item("DigiProtein") for _ in range(o.digiprotein.value)]
+        pool += [self.create_item("Processed Meat") for _ in range(meat_count)]
+        pool += [self.create_item("Digimeat") for _ in range(digimeat_count)]
+        pool += [self.create_item("DigiProtein") for _ in range(digiprotein_count)]
 
         # Fill remaining locations with filler.
         total_locations = sum(1 for loc in self.multiworld.get_locations(self.player)
