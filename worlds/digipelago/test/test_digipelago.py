@@ -108,7 +108,9 @@ class TestFoodBaselineCounts(_DigiBase):
 
 
 class TestFoodBaselineRespectsOverride(TestFoodBaselineCounts):
-    options = {"starting_mode": 2, "processed_meat": 50}
+    # food_filler_percent: 0 isolates the baseline-vs-explicit behaviour (otherwise the
+    # filler conversion would add more Processed Meat on top of the explicit 50).
+    options = {"starting_mode": 2, "processed_meat": 50, "food_filler_percent": 0}
 
     def test_explicit_higher_count_wins(self):
         self.assertEqual(self._count("Processed Meat"), 50,
@@ -133,6 +135,41 @@ class TestFoodBaselineOnSwitchOnFreeText(TestFoodBaselineCounts):
         self.assertGreater(self._count("Processed Meat"), 0)
         self.assertGreater(self._count("Digimeat"), 0)
         self.assertGreater(self._count("DigiProtein"), 0)
+
+
+class _FoodFillerBase(TestFoodBaselineCounts):
+    def _total_food(self):
+        return sum(self._count(n) for n in ("Processed Meat", "Digimeat", "DigiProtein"))
+
+
+class TestFoodFillerDensity(_FoodFillerBase):
+    """Default 12% of filler becomes food on a silhouette seed, so the pool carries
+    far more food than the small baseline (proves filler is converted, scaling to size)."""
+    options = {"starting_mode": 2}
+
+    def test_filler_converted_to_food(self):
+        self.assertGreater(self._total_food(), 50,
+                           "food_filler_percent should convert a meaningful slice of filler to food")
+
+
+class TestFoodFillerZeroIsBaselineOnly(_FoodFillerBase):
+    """food_filler_percent=0 disables the filler-conversion; only the small baseline
+    remains (NOT the do-nothing-filler-sized amount)."""
+    options = {"starting_mode": 2, "food_filler_percent": 0}
+
+    def test_zero_percent_leaves_only_baseline(self):
+        self.assertLess(self._total_food(), 30,
+                        "0% must fall back to just the baseline food, not the filler-scaled amount")
+
+
+class TestFoodFillerIgnoredWhenSilhouetteUnreachable(_FoodFillerBase):
+    """Even at 100%, a free-text-locked seed gets NO food (food is useless without the
+    stamina meter), so the percent must be ignored when silhouette is unreachable."""
+    options = {"starting_mode": 0, "allow_mode_switch": False, "food_filler_percent": 100,
+               "processed_meat": 0, "digimeat": 0, "digiprotein": 0}
+
+    def test_no_food_in_free_text_locked_seed(self):
+        self.assertEqual(self._total_food(), 0)
 
 
 class TestInvariants(_DigiBase):

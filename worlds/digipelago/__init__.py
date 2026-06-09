@@ -161,11 +161,25 @@ class DigipelagoWorld(World):
         pool += [self.create_item("Digimeat") for _ in range(digimeat_count)]
         pool += [self.create_item("DigiProtein") for _ in range(digiprotein_count)]
 
-        # Fill remaining locations with filler.
+        # Fill remaining locations with filler. In silhouette-reachable seeds, replace
+        # food_filler_percent% of that filler with weighted stamina-economy items
+        # (mostly Processed Meat, some Digimeat, the odd DigiProtein/Stamina Up) instead
+        # of do-nothing Digivice, so the feeding loop scales with the seed size rather
+        # than being a rounding error in a 900-slot pool. Food displaces filler 1:1, so
+        # the location/item balance is unchanged and these stay useful/never-progression.
         total_locations = sum(1 for loc in self.multiworld.get_locations(self.player)
                               if loc.address is not None)
+        n_filler = max(0, total_locations - len(pool))
+        n_food_filler = 0
+        if silhouette_reachable and n_filler > 0:
+            n_food_filler = round(n_filler * o.food_filler_percent.value / 100)
+        if n_food_filler > 0:
+            food_filler = self.random.choices(
+                ["Processed Meat", "Digimeat", "DigiProtein", "Stamina Up"],
+                weights=[60, 22, 8, 10], k=n_food_filler)
+            pool += [self.create_item(name) for name in food_filler]
         pool += [self.create_item(self.get_filler_item_name())
-                 for _ in range(total_locations - len(pool))]
+                 for _ in range(n_filler - n_food_filler)]
 
         self.multiworld.itempool += pool
 

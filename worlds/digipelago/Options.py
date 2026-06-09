@@ -167,6 +167,19 @@ class DigiProteinCount(Range):
     default = 1
 
 
+class FoodFillerPercent(Range):
+    """Silhouette mode only: what percent of the filler pool is replaced with weighted
+    stamina-economy items (mostly Processed Meat, some Digimeat, the odd DigiProtein /
+    Stamina Up) instead of do-nothing Digivice. This scales the feeding loop to the seed
+    size rather than leaving food a rounding error in a ~900-slot pool. 0 = all Digivice
+    (only the small baseline food applies). Ignored when silhouette is not reachable
+    (food does nothing in the free-text modes). Client-side useful items, never gate AP."""
+    display_name = "Food Filler Percent"
+    range_start = 0
+    range_end = 100
+    default = 12
+
+
 # Choice index -> dataset attribute string (must match data.ATTRIBUTES exactly).
 STARTING_ATTRIBUTE_NAMES = {0: "Vaccine", 1: "Virus", 2: "Data", 3: "Free"}
 
@@ -197,3 +210,4 @@ class DigipelagoOptions(PerGameCommonOptions):
     processed_meat: ProcessedMeatCount
     digimeat: DigimeatCount
     digiprotein: DigiProteinCount
+    food_filler_percent: FoodFillerPercent
