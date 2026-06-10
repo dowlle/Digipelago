@@ -1,39 +1,83 @@
-# Digipelago — APWorld
+# Digipelago APWorld
 
-The Archipelago world for **Digipelago**, a Digimon guessing-game randomizer for
-Archipelago (the Digimon counterpart to Pokepelago). Unofficial, non-commercial fan
-project. The game client lives in a separate repository.
+The Archipelago world for **Digipelago**, a Digimon guessing game for the
+[Archipelago Multiworld Randomizer](https://archipelago.gg) (the Digimon counterpart
+to Pokepelago). Unofficial, non-commercial fan project.
 
-## Current contents (Phase 0)
+You play it in your browser at **https://digipelago.ap-pie.com**, nothing to install
+on the playing side. This repository provides the world file that Archipelago needs to
+generate a multiworld containing a Digipelago slot. The web client lives at
+[dowlle/DigipelagoClient](https://github.com/dowlle/DigipelagoClient).
 
-- `tools/build_digimon_data.py` — pulls the [Digi-API](https://digi-api.com/) catalogue,
-  dedupes to a candidate guessing pool, and analyses the evolution graph for curation
-  (level×attribute cell counts, forced roots, cross-attribute edges, attribute orphans).
-  Stdlib only; needs a browser User-Agent (Digi-API 403s default urllib).
-  Run: `python tools/build_digimon_data.py [--refresh]`.
-- `data/digimon_raw.json` — cached full detail dump (1,488 entries).
-- `data/analysis.json` — computed distributions + curation findings.
+## How it plays
 
-## APWorld (Phase 1, vertical slice)
+Items from the multiworld widen what you can guess: DigiStorage Upgrades raise how
+many Digimon you can have caught, progressive Digivolution keys unlock levels (Rookie
+up to Mega), and Attribute Keys unlock attributes (Vaccine, Virus, Data, Free,
+Variable, Unknown). Each correct guess catches that Digimon and completes a check,
+sending an item to someone in the multiworld. Catch enough Digimon (your YAML's goal)
+and you win. The full guide is on the site under "How to play".
 
-- `worlds/digipelago/` — the Archipelago world. Progression = DigiStorage capacity +
-  progressive Digivolution level keys + Attribute keys, over abstract `Catch Slot #k`
-  locations. AP logic gates only on `capacity` + `pool_size` (graph/identity-independent).
-  Consumes `worlds/digipelago/data/digimon_mvp.json`.
+## Setup
 
-### Test-generate a seed
+1. Install [Archipelago](https://archipelago.gg) **0.6.7 or newer**.
+2. Download `digipelago.apworld` from the
+   [releases page](https://github.com/dowlle/Digipelago/releases) and double-click it
+   to install it (or place it in Archipelago's `custom_worlds` folder).
+3. In the Archipelago Launcher, pick **Generate Template Options** to get a
+   `Digipelago.yaml` template, then edit your player name and options.
+4. Put every player's YAML in the `Players` folder and run **Generate**. Host the
+   resulting zip at [archipelago.gg](https://archipelago.gg) under **Host Game**, or
+   run the Archipelago server locally.
+5. Open https://digipelago.ap-pie.com, enter the server address, port, and your slot
+   name, and start guessing.
 
-The world isn't a standalone install yet; test it inside an existing AP 0.6.7 install:
+Note: the archipelago.gg website can only generate games for worlds it ships with.
+Digipelago seeds must be generated locally with the apworld installed; hosting the
+generated game on archipelago.gg works fine.
 
-```
-# copy the world + a YAML into an AP install, then generate
-cp -r worlds/digipelago <AP_INSTALL>/worlds/digipelago
-#  <AP_INSTALL>/Players_digi/digi.yaml :  name + "game: Digipelago" + a Digipelago: block
-<AP_INSTALL>/.venv/Scripts/python.exe Generate.py --player_files_path Players_digi --seed 12345 --outputpath output_digi
-```
+## Options highlights
 
-Validated 2026-05-30: beatable 922-location seed, 0.12s. See the vault note
-`Development/2026-05-30 — Phase 1 — APWorld Vertical Slice`.
+- `goal` / `goal_count` / `goal_level`: what winning means; catch a total number of
+  Digimon, or a number of one level (for example 20 Ultimates).
+- `starting_mode`: the input mode the client opens in; `silhouette` (default,
+  multiple choice), `free_text`, `free_text_hard` (hidden target with clues), or
+  `mixed` (each round rolls typing or multiple choice).
+- `allow_mode_switch`: off by default, locking the seed to the starting mode.
+- `mc_difficulty`: how confusable the wrong silhouette options are (`hard` picks
+  lookalike variants of the same Digimon family).
+- `starting_capacity` / `capacity_per_upgrade`: the DigiStorage capacity curve.
+- Stamina and food pacing for silhouette mode (`starting_stamina`,
+  `stamina_regen_seconds`, food counts, `food_filler_percent`); the defaults are
+  sensible for a first game.
+
+Every option is documented in the generated YAML template.
+
+## World design (for the curious)
+
+Progression is DigiStorage capacity + progressive Digivolution level keys + Attribute
+Keys over abstract `Catch Slot #k` locations. Archipelago logic gates only on capacity
+and the unlocked pool size, never on specific Digimon identities, so the multiworld can
+never strand you. Digivolution-line ordering (guess an evolved form only after catching
+a curated prior form) is enforced client-side and cannot affect beatability. The world
+package is self-contained: the curated dataset (`worlds/digipelago/data/digimon_mvp.json`,
+about 900 Digimon) ships inside it, and a `dataset_version` handshake keeps the client
+and world in sync.
+
+## Repository contents
+
+- `worlds/digipelago/`: the Archipelago world, including its dataset and unit tests.
+- `tools/build_digimon_data.py`: rebuilds the curated dataset from the
+  [Digi-API](https://digi-api.com/) catalogue (dedup, curation analysis, level and
+  attribute gate grid). Stdlib only; needs a browser User-Agent (Digi-API 403s default
+  urllib). Run: `python tools/build_digimon_data.py [--refresh]`.
+- `data/`: the raw cached Digi-API dump and curation analysis the build tool consumes.
+
+### Running the tests
+
+The world tests run inside an Archipelago source checkout (0.6.7): copy
+`worlds/digipelago` into the checkout's `worlds/` folder and run pytest on
+`worlds/digipelago/test`.
 
 ## License
 
