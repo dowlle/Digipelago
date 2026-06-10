@@ -6,3 +6,5 @@ output*/
 # Large regenerable raw API dump (re-pull with: build_digimon_data.py --refresh).
 # The committed pinned artifact is data/digimon_mvp.json + worlds/digipelago/data/.
 data/digimon_raw.json
+
+dist/

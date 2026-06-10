@@ -6,10 +6,13 @@ from __future__ import annotations
 
 import hashlib
 import json
-from pathlib import Path
+import pkgutil
 
-_PATH = Path(__file__).parent / "data" / "digimon_mvp.json"
-_RAW_BYTES = _PATH.read_bytes()
+# pkgutil resolves package data both from a source checkout (worlds/digipelago/)
+# and from inside a zipped .apworld (zipimport), where Path(__file__) breaks.
+_RAW_BYTES = pkgutil.get_data(__package__, "data/digimon_mvp.json")
+if _RAW_BYTES is None:
+    raise FileNotFoundError("digipelago: bundled data/digimon_mvp.json not found")
 _DATA = json.loads(_RAW_BYTES.decode("utf-8"))
 
 # Content version of the pinned dataset. Embedded by tools/build_digimon_data.py
